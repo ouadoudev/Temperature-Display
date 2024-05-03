@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temperature Display</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <h2 id="city-name">Weather</h2>
+        <p id="weather-info"> Information</p>
+        <img id="city-image" src="#" alt="City Image">
+        <button id="generate-button">Generate</button>
+        <div class="weather">
+            <h2 class="city">Cuerrent City</h2>
+            <h1 class="temp">22°C</h1>
+            <div class="details">
+                <div class="col">
+                    <img src="" alt="Temperature Icon" width="30" height="30">
+                    <p class="info">15°C</p>
+                    <p>Temperature</p>
+                </div>
+                <div class="col">
+                    <img src="" alt="Wind Icon" width="30" height="30">
+                    <p class="info">15 km/h</p>
+                    <p>Wind Speed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+   
+    
+
+
+    <script>
+        const cities = [
+            { name: 'New York', lat: 40.7128, lng: -74.0060 },
+            { name: 'London', lat: 51.5074, lng: -0.1278 },
+            { name: 'Paris', lat: 48.8566, lng: 2.3522 },
+            { name: 'Tokyo', lat: 35.6895, lng: 139.6917 },
+            { name: 'Sydney', lat: -33.8651, lng: 151.2099 },
+            { name: 'Rome', lat: 41.9028, lng: 12.4964 },
+            { name: 'Cairo', lat: 30.0444, lng: 31.2357 },
+            { name: 'Rio de Janeiro', lat: -22.9068, lng: -43.1729 },
+            { name: 'Dubai', lat: 25.2048, lng: 55.2708 },
+            { name: 'Rabat', lat: 34.0209, lng: -6.8416 }
+        ];
+
+        async function fetchWeather(latitude, longitude) {
+            const api = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current_weather=true`;
+            const response = await fetch(api);
+            const data = await response.json();
+            return data
+
+            
+
+        }
+
+        function selectRandomCity(cities) {
+            const randomIndex = Math.floor(Math.random() * cities.length);
+            return cities[randomIndex];
+        }
+
+        const generateButton = document.getElementById('generate-button');
+        generateButton.addEventListener('click',async () => {
+            
+            const randomCity = selectRandomCity(cities);
+            console.log(randomCity);
+            const dataOfCity=  await fetchWeather(randomCity.lat,randomCity.lng)
+            console.log(dataOfCity);
+            document.querySelector(".city").innerHTML = randomCity.name;
+            document.querySelector(".temp").innerHTML = dataOfCity.current_weather.temperature +" °C";
+            document.querySelector(".info").innerHTML = dataOfCity.current_weather.windspeed+" km/h";
+          
+        });
+    </script>
+</body>
+</html>
